@@ -11,7 +11,7 @@ pipeline {
         stage('building application'){
             steps {
                 sshagent([credential]) {
-                    sh '''ssh ${server} << EOF 
+                    sh '''ssh - J ${server} << EOF 
                     cd ${directory}
                     docker build -t ${image} + ":$BUILD_NUMBER" .
                     exit
