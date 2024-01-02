@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('building application'){
             steps {
-                sshagent([credential]) {
+                sshagent(credentials: ['github-appserver']) {
                     sh """ssh -o StrictHostKeyChecking=no $(server) << EOF 
                     cd $(directory)
                     docker build -t $(image) + ":$BUILD_NUMBER"
