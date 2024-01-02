@@ -11,7 +11,8 @@ pipeline {
         stage('building application'){
             steps {
                 sshagent([credential]) {
-                    sh """ssh -o StrictHostKeyChecking=no $(server) << EOF 
+                    sh 
+                    """ssh -o StrictHostKeyChecking=no $(server) << EOF 
                     cd $(directory)
                     docker build -t $(image) + ":$BUILD_NUMBER"
                     exit
