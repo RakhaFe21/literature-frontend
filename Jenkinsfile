@@ -11,8 +11,8 @@ pipeline {
         stage('building application'){
             steps {
                 sshagent([credential]) {
-                    sh '''ssh -o StrictHostKeyChecking=no $(server) << EOF 
-                    cd $(directory)
+                    sh '''ssh -o StrictHostKeyChecking=no team3@103.127.132.63 << EOF 
+                    cd /home/team3/literature-frontend
                     docker build -t rakhafe/frontend:latest .
                     docker rmi rakhafe/frontend:1.2
                     exit
