@@ -13,7 +13,7 @@ pipeline {
                 sshagent([credential]) {
                     sh '''ssh -o StrictHostKeyChecking=no team3@103.127.132.63 << EOF 
                     cd /home/team3/literature-frontend
-                    docker build -t rakhafe/$JOB_NAME:v1 $BUILD_ID .
+                    docker.build("rakhafe:${env.BUILD_ID}") .
                     exit
                     EOF'''
                 }
