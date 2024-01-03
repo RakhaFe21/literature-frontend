@@ -7,7 +7,7 @@ def image = 'rakhafe/frontend'
 
 pipeline {
     agent any
-    environtment{
+    environment{
         BUILD_TAG = 1.4
     }
     stages {
