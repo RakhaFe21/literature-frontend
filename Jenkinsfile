@@ -72,6 +72,10 @@ pipeline {
                 }
             }
         }
-        discordSend description: "Frontend Pipeline", footer: "Test", result: currentBuild.currentResult, title: "frontend", webhookURL: https://discord.com/api/webhooks/1192097833042579536/qInbfRCW9G8UdivrNlhqeO-AvSijRIdWYbTaGKgKx8sSDR8bCHllZrZ8dPQR3HwKKjau
+        stage('send notification to discord'){
+            steps {
+                discordSend description: "Frontend Pipeline", footer: "Test", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "https://discord.com/api/webhooks/1192097833042579536/qInbfRCW9G8UdivrNlhqeO-AvSijRIdWYbTaGKgKx8sSDR8bCHllZrZ8dPQR3HwKKjau"
+            }
+        }
     }
 }
