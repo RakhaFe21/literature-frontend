@@ -48,7 +48,9 @@ pipeline {
             }
         }
         stage('Deploy aplikasi on top docker'){
-            dependsOn 'Testing application'
+            when {
+                expression { currentBuild.resultIsBetterOrEqualTo('SUCCESS') }
+            }
             steps {
                 sshagent([credential]) {
                     sh '''ssh -o StrictHostKeyChecking=no ${server} << EOF
