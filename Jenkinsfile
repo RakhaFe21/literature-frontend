@@ -26,8 +26,7 @@ pipeline {
                 sshagent([credential]) {
                     sh '''ssh -o StrictHostKeyChecking=no ${server} << EOF 
                     cd ${directory}
-                    docker rmi  rakhafe/frontend:latest
-                    docker build -t ${image}:latest .
+                    docker build -t ${image}:env.BUILD_NUMBER .
                     exit
                     EOF'''
                 }
