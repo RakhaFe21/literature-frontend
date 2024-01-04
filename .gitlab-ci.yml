@@ -6,6 +6,10 @@ stages:
   - pulling new image
   - deploy
 
+default:
+  tags:
+    - runner-docker
+    - runner-shell
 variables:
   VAR_DIREKTORI: "/home/team3/literature-frontend"
   VAR_GIT_URL: "git@gitlab-team3:RakhaFe21/literature-frontend.git"
@@ -16,7 +20,6 @@ variables:
 
 Pulling code:
   stage : pulling repository
-  tags : [runner-docker]
   image: docker
   services:
     - docker:dind
