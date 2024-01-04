@@ -1,3 +1,5 @@
+image: docker:stable
+
 stages:
   - inisialisasi
   - pulling repository
@@ -14,15 +16,9 @@ variables:
   VAR_IP: "103.127.132.63"
   VAR_IMAGE: "rakhafe/frontend:lts-github"
 
-docker-build:
-  # Use the official docker image.
-  image: docker:cli
-  stage: inisialisasi
-  services:
-    - docker:dind
-  script:
-    - "docker login -u $VAR_USER_DOCKER -p $VAR_ACCESS_TOKEN"
-
+services: 
+  - docker::dind
+  
 Pulling code:
   stage : pulling repository
   before_script:
