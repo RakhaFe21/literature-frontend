@@ -16,10 +16,10 @@ variables:
   VAR_IP: "103.127.132.63"
   VAR_IMAGE: "rakhafe/frontend:lts-github"
 
-services: 
-  - docker::dind
-  
+
 Pulling code:
+  services: 
+  - docker:dind
   stage : pulling repository
   before_script:
     - "which ssh-agent || ( apt-get install openssh-client )"
