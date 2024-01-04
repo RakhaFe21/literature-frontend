@@ -1,7 +1,4 @@
-image: docker:stable
-
 stages:
-  - inisialisasi
   - pulling repository
   - build
   - test
