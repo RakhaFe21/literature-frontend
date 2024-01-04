@@ -64,7 +64,7 @@ Testing:
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
   script : 
-    - ssh $VAR_USER@$VAR_IP "cd $VAR_DIREKTORI && docker run --name test_fe -p 3000:3000 -d $VAR_IMAGE && wget --no-verbose --tries=1 --spider localhost:3000 && docker stop test_fe && docker rm test_fe && exit"
+    - ssh $VAR_USER@$VAR_IP "cd $VAR_DIREKTORI && docker run --name test_fe -p 3000:3000 -d $VAR_IMAGE && curl localhost:3000 && docker stop test_fe && docker rm test_fe && exit"
     - echo "testing application success"
 
 Push image to registry:
