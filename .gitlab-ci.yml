@@ -16,7 +16,6 @@ variables:
 
 Pulling code:
   stage : pulling repository
-  tags: [runner-docker]
   image: docker
   services:
     - docker:dind
