@@ -27,8 +27,8 @@ Pulling code:
 
   script :
     - ssh $VAR_USER@$VAR_IP
-    - docker compose down
     - cd $VAR_DIREKTORI
+    - docker compose down
     - git pull gitlab main && exit
     - echo "pulling code success!"
 
