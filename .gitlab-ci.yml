@@ -16,7 +16,7 @@ variables:
 
 Pulling code:
   stage : pulling repository
-  image: docker:latest
+  image: docker
   services: 
   - docker:dind
   before_script:
