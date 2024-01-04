@@ -20,6 +20,8 @@ docker-build:
   stage: inisialisasi
   services:
     - docker:dind
+  script:
+    - "docker login -u $VAR_USER_DOCKER -p $VAR_ACCESS_TOKEN"
 
 Pulling code:
   stage : pulling repository
