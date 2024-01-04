@@ -47,7 +47,7 @@ Dockerize:
   script : 
     - ssh $VAR_USER@$VAR_IP 
     - "cd $VAR_DIREKTORI"
-    - "docker build -t $VAR_IMAGE .""
+    - "docker build -t $VAR_IMAGE . "
     - "exit"
     - echo "building application success!"
 
