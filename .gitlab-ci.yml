@@ -17,8 +17,8 @@ variables:
 Pulling code:
   stage : pulling repository
   image: docker
-  servicess: 
-  - docker:dind
+  services: 
+    - docker:dind
   before_script:
     - "which ssh-agent || ( apt-get install openssh-client )"
     - eval $(ssh-agent -s)
