@@ -1,4 +1,5 @@
 stages:
+  - inisialisasi
   - pulling repository
   - build
   - test
@@ -12,6 +13,13 @@ variables:
   VAR_USER: "team3"
   VAR_IP: "103.127.132.63"
   VAR_IMAGE: "rakhafe/frontend:lts-github"
+
+docker-build:
+  # Use the official docker image.
+  image: docker:cli
+  stage: inisialisasi
+  services:
+    - docker:dind
 
 Pulling code:
   stage : pulling repository
