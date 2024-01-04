@@ -1,0 +1,139 @@
+stages:
+  - pulling repository
+  - build
+  - test
+  - push
+  - pulling new image
+  - deploy
+
+variables:
+  VAR_DIREKTORI: "/home/team3/literature-frontend"
+  VAR_GIT_URL: "git@gitlab-team3:RakhaFe21/literature-frontend.git"
+  VAR_USER: "team3"
+  VAR_IP: "103.127.132.63"
+  VAR_IMAGE: "rakhafe/frontend:lts-github"
+
+Pulling code:
+  stage : pulling repository
+  before_script:
+    - "which ssh-agent || ( apt-get install openssh-client )"
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $VAR_IP >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+  script :
+    - ssh $VAR_USER@$VAR_IP
+    - docker compose down
+    - cd $VAR_DIREKTORI
+    - git pull gitlab main && exit
+    - echo "pulling code success!"
+
+Dockerize:
+  stage : build
+  before_script:
+    - "which ssh-agent || ( apt-get install openssh-client )"
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $VAR_IP >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+  script : 
+    - ssh $VAR_USER@$VAR_IP 
+    - cd $VAR_DIREKTORI
+    - docker build -t $VAR_IMAGE .
+    - exit
+    - echo "building application success!"
+
+Testing:
+  stage : test
+  before_script:
+    - "which ssh-agent || ( apt-get install openssh-client )"
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $VAR_IP >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+  script : 
+    - ssh $VAR_USER@$VAR_IP
+    - cd $VAR_DIREKTORI
+    - docker run --name test_fe -p 3000:3000 -d ${image}
+    - wget --no-verbose --tries=1 --spider localhost:3000
+    - docker stop test_fe
+    - docker rm test_fe
+    - exit
+    - echo "testing application success"
+
+Push image to registry:
+  stage : push
+  before_script:
+    - "which ssh-agent || ( apt-get install openssh-client )"
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $VAR_IP >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+  script : 
+    - ssh $VAR_USER@$VAR_IP 
+    - cd $VAR_DIREKTORI
+    - docker login -u $VAR_USER_DOCKER -p $VAR_ACCESS_TOKEN
+    - docker push ${image}
+    - exit
+    - echo "Push image to registry success!"
+
+Pull new image:
+  stage : pulling new image
+  before_script:
+    - "which ssh-agent || ( apt-get install openssh-client )"
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $VAR_IP >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+  script : 
+    - ssh $VAR_USER@$VAR_IP 
+    - cd $VAR_DIREKTORI
+    - docker image pull ${image}
+    - exit
+    - echo "Pull image from registry success!"
+
+Deploying:
+  stage : deploy
+  before_script:
+    - "which ssh-agent || ( apt-get install openssh-client )"
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $VAR_IP >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+  script : 
+    - ssh $VAR_USER@$VAR_IP 
+    - cd $VAR_DIREKTORI
+    - docker compose up -d
+    - exit
+    - echo "Deploy success!"
+
+
+
+
+
+    
+
