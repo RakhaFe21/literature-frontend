@@ -52,6 +52,7 @@ Dockerize:
 
 Testing:
   stage : test
+  image: alpine:latest
   before_script:
     - "which ssh-agent || ( apt-get install openssh-client )"
     - eval $(ssh-agent -s)
@@ -63,17 +64,12 @@ Testing:
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
   script : 
-    - ssh $VAR_USER@$VAR_IP
-    - "cd $VAR_DIREKTORI"
-    - "docker run --name test_fe -p 3000:3000 -d ${image}"
-    - "wget --no-verbose --tries=1 --spider localhost:3000"
-    - "docker stop test_fe"
-    - "docker rm test_fe"
-    - "exit"
+    - ssh $VAR_USER@$VAR_IP "cd $VAR_DIREKTORI && docker run --name test_fe -p 3000:3000 -d ${image} && wget --no-verbose --tries=1 --spider localhost:3000 && docker stop test_fe && docker rm test_fe && exit"
     - echo "testing application success"
 
 Push image to registry:
   stage : push
+  image: alpine:latest
   before_script:
     - "which ssh-agent || ( apt-get install openssh-client )"
     - eval $(ssh-agent -s)
@@ -85,15 +81,12 @@ Push image to registry:
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
   script : 
-    - ssh $VAR_USER@$VAR_IP 
-    - "cd $VAR_DIREKTORI"
-    - "docker login -u $VAR_USER_DOCKER -p $VAR_ACCESS_TOKEN"
-    - "docker push ${image}"
-    - "exit"
+    - ssh $VAR_USER@$VAR_IP "cd $VAR_DIREKTORI && docker login -u $VAR_USER_DOCKER -p $VAR_ACCESS_TOKEN && docker push ${image} && exit"
     - echo "Push image to registry success!"
 
 Pull new image:
   stage : pulling-new-image
+  image: alpine:latest
   before_script:
     - "which ssh-agent || ( apt-get install openssh-client )"
     - eval $(ssh-agent -s)
@@ -105,14 +98,12 @@ Pull new image:
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
   script : 
-    - ssh $VAR_USER@$VAR_IP 
-    - "cd $VAR_DIREKTORI"
-    - "docker image pull ${image}"
-    - "exit"
+    - ssh $VAR_USER@$VAR_IP "cd $VAR_DIREKTORI && docker image pull ${image} && exit"
     - echo "Pull image from registry success!"
 
 Deploying:
   stage : deploy
+  image: alpine:latest
   before_script:
     - "which ssh-agent || ( apt-get install openssh-client )"
     - eval $(ssh-agent -s)
@@ -124,8 +115,5 @@ Deploying:
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
   script : 
-    - ssh $VAR_USER@$VAR_IP 
-    - "cd $VAR_DIREKTORI"
-    - "docker compose up -d"
-    - "exit"
+    - ssh $VAR_USER@$VAR_IP "cd $VAR_DIREKTORI && docker compose up -d && exit"
     - echo "Deploy success!"
