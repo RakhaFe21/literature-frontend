@@ -47,10 +47,7 @@ Dockerize:
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
   script : 
-    - ssh $VAR_USER@$VAR_IP 
-    - "cd $VAR_DIREKTORI"
-    - "docker build -t $VAR_IMAGE . "
-    - "exit"
+    - ssh $VAR_USER@$VAR_IP "cd $VAR_DIREKTORI && docker build -t $VAR_IMAGE . && exit "
     - echo "building application success!"
 
 Testing:
