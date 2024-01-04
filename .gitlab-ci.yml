@@ -27,9 +27,9 @@ Pulling code:
 
   script :
     - ssh $VAR_USER@$VAR_IP
-    - cd $VAR_DIREKTORI
-    - docker compose down
-    - git pull gitlab main && exit
+    - "docker compose down"
+    - "cd $VAR_DIREKTORI"
+    - "git pull gitlab main && exit"
     - echo "pulling code success!"
 
 Dockerize:
@@ -46,9 +46,9 @@ Dockerize:
 
   script : 
     - ssh $VAR_USER@$VAR_IP 
-    - cd $VAR_DIREKTORI
-    - docker build -t $VAR_IMAGE .
-    - exit
+    - "cd $VAR_DIREKTORI"
+    - "docker build -t $VAR_IMAGE .""
+    - "exit"
     - echo "building application success!"
 
 Testing:
@@ -65,12 +65,12 @@ Testing:
 
   script : 
     - ssh $VAR_USER@$VAR_IP
-    - cd $VAR_DIREKTORI
-    - docker run --name test_fe -p 3000:3000 -d ${image}
-    - wget --no-verbose --tries=1 --spider localhost:3000
-    - docker stop test_fe
-    - docker rm test_fe
-    - exit
+    - "cd $VAR_DIREKTORI"
+    - "docker run --name test_fe -p 3000:3000 -d ${image}"
+    - "wget --no-verbose --tries=1 --spider localhost:3000"
+    - "docker stop test_fe"
+    - "docker rm test_fe"
+    - "exit"
     - echo "testing application success"
 
 Push image to registry:
@@ -87,10 +87,10 @@ Push image to registry:
 
   script : 
     - ssh $VAR_USER@$VAR_IP 
-    - cd $VAR_DIREKTORI
-    - docker login -u $VAR_USER_DOCKER -p $VAR_ACCESS_TOKEN
-    - docker push ${image}
-    - exit
+    - "cd $VAR_DIREKTORI"
+    - "docker login -u $VAR_USER_DOCKER -p $VAR_ACCESS_TOKEN"
+    - "docker push ${image}"
+    - "exit"
     - echo "Push image to registry success!"
 
 Pull new image:
@@ -107,9 +107,9 @@ Pull new image:
 
   script : 
     - ssh $VAR_USER@$VAR_IP 
-    - cd $VAR_DIREKTORI
-    - docker image pull ${image}
-    - exit
+    - "cd $VAR_DIREKTORI"
+    - "docker image pull ${image}"
+    - "exit"
     - echo "Pull image from registry success!"
 
 Deploying:
@@ -126,14 +126,7 @@ Deploying:
 
   script : 
     - ssh $VAR_USER@$VAR_IP 
-    - cd $VAR_DIREKTORI
-    - docker compose up -d
-    - exit
+    - "cd $VAR_DIREKTORI"
+    - "docker compose up -d"
+    - "exit"
     - echo "Deploy success!"
-
-
-
-
-
-    
-
