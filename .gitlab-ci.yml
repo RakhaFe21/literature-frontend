@@ -30,10 +30,8 @@ Pulling code:
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
   script :
-    - ssh $VAR_USER@$VAR_IP
+    - ssh $VAR_USER@$VAR_IP "cd $VAR_DIREKTORI && git pull gitlab main && exit"
     - "docker compose down"
-    - "cd $VAR_DIREKTORI"
-    - "git pull gitlab main && exit"
     - echo "pulling code success!"
 
 Dockerize:
