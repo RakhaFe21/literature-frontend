@@ -7,6 +7,7 @@ pipeline {
         branch = 'main'
         service = 'frontend'
         image = 'rakhafe/frontend'
+        BUILD_NUMBER = '${BUILD_NUMBER}'
     }
     stages {
         stage('Pull code dari repository'){
@@ -53,7 +54,7 @@ pipeline {
             steps {
                 sshagent([credential]) {
                     sh '''ssh -o StrictHostKeyChecking=no ${server} << EOF
-                    sed -i 's/frontend:latest/${image}:${BUILD_NUMBER}/g' docker-compose.yaml
+                    sed -i '32c\    image: rakhafe/frontend:${BUILD_NUMBER}' docker-compose.yaml
                     docker compose up -d 
                     cd ${directory}
                     exit
