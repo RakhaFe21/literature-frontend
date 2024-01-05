@@ -16,7 +16,7 @@ pipeline {
                     sh '''ssh -o StrictHostKeyChecking=no ${server} << EOF 
                     docker compose down
                     cd ${directory}
-                    git pull origin ${branch}
+                    git pull github ${branch}
                     exit
                     EOF'''
                 }
