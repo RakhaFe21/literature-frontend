@@ -49,7 +49,8 @@ Dockerize:
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
   script : 
-    - ssh $VAR_USER@$VAR_IP "cd $VAR_DIREKTORI && docker build -t $VAR_IMAGE . && exit "
+    - ssh $VAR_USER@$VAR_IP "cd $VAR_DIREKTORI && docker build -t $VAR_IMAGE ."
+    - ssh $VAR_USER@$VAR_IP docker compose up -d && exit "
     - echo "building application success!"
 
 Testing:
@@ -69,9 +70,7 @@ Testing:
 
   script : 
     - ssh $VAR_USER@$VAR_IP "cd $VAR_DIREKTORI"
-    - ssh $VAR_USER@$VAR_IP "docker run --name test_fe -p 3000:3000 -d $VAR_IMAGE"
-    - ssh $VAR_USER@$VAR_IP "wget -nv -t1 --spider localhost:3000"
-    - ssh $VAR_USER@$VAR_IP " docker stop test_fe && docker rm test_fe && exit"
+    - ssh $VAR_USER@$VAR_IP "wget --spider localhost:3000"
     - echo "testing application success"
 
 Push image to registry:
