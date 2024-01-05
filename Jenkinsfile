@@ -38,7 +38,7 @@ pipeline {
                     sh '''ssh -o StrictHostKeyChecking=no ${server} << EOF 
                     cd ${directory}
                     docker run --name test_fe -p 3000:3000 -d ${image}:${BUILD_NUMBER}
-                    wget --no-verbose --tries=1 --spider localhost:3000
+                    wget --spider localhost:3000
                     docker stop test_fe
                     docker rm test_fe
                     exit
