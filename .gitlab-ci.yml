@@ -35,7 +35,9 @@ Pulling code:
 
 Dockerize:
   stage : build
-  image: alpine:latest
+  image: docker
+  services:
+    - docker:dind
   before_script:
     - "which ssh-agent || ( apt-get install openssh-client )"
     - eval $(ssh-agent -s)
@@ -52,7 +54,9 @@ Dockerize:
 
 Testing:
   stage : test
-  image: alpine:latest
+  image: docker
+  services:
+    - docker:dind
   before_script:
     - "which ssh-agent || ( apt-get install openssh-client )"
     - eval $(ssh-agent -s)
@@ -65,13 +69,16 @@ Testing:
 
   script : 
     - ssh $VAR_USER@$VAR_IP "cd $VAR_DIREKTORI"
-    - ssh $VAR_USER@$VAR_IP "docker run --name test_fe -p 3000:3000 -d $VAR_IMAGE && wget -nv -t1 --spider localhost:3000"
+    - ssh $VAR_USER@$VAR_IP "docker run --name test_fe -p 3000:3000 -d $VAR_IMAGE"
+    - ssh $VAR_USER@$VAR_IP "wget -nv -t1 --spider localhost:3000"
     - ssh $VAR_USER@$VAR_IP " docker stop test_fe && docker rm test_fe && exit"
     - echo "testing application success"
 
 Push image to registry:
   stage : push
-  image: alpine:latest
+  image: docker
+  services:
+    - docker:dind
   before_script:
     - "which ssh-agent || ( apt-get install openssh-client )"
     - eval $(ssh-agent -s)
@@ -88,7 +95,9 @@ Push image to registry:
 
 Pull new image:
   stage : pulling-new-image
-  image: alpine:latest
+  image: docker
+  services:
+    - docker:dind
   before_script:
     - "which ssh-agent || ( apt-get install openssh-client )"
     - eval $(ssh-agent -s)
@@ -105,7 +114,9 @@ Pull new image:
 
 Deploying:
   stage : deploy
-  image: alpine:latest
+  image: docker
+  services:
+    - docker:dind
   before_script:
     - "which ssh-agent || ( apt-get install openssh-client )"
     - eval $(ssh-agent -s)
