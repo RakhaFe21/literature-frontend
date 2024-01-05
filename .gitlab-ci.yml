@@ -66,6 +66,7 @@ Testing:
   script : 
     - ssh $VAR_USER@$VAR_IP "cd $VAR_DIREKTORI"
     - ssh $VAR_USER@$VAR_IP "docker run --name test_fe -p 3000:3000 -d $VAR_IMAGE"
+    - ssh $VAR_USER@$VAR_IP "wget -nv -t1 --spider localhost:3000"
     - ssh $VAR_USER@$VAR_IP " docker stop test_fe && docker rm test_fe && exit"
     - echo "testing application success"
 
